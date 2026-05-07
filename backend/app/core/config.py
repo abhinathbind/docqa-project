@@ -24,7 +24,7 @@ class Settings(BaseSettings):
 
     # CORS
     
-    ALLOWED_ORIGINS: List[str] = [ "http://localhost:3000", 
+    ALLOWED_ORIGINS: List[str] = [ "http://localhost:8000", 
       "http://localhost:80", "https://docqa-project.netlify.app"]
     
 
