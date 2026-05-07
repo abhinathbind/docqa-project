@@ -23,7 +23,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     # CORS
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:80"]
+    
+    ALLOWED_ORIGINS: List[str] = [ "http://localhost:3000", 
+      "http://localhost:80", "https://docqa-project.netlify.app"]
+    
 
     # File upload
     MAX_FILE_SIZE_MB: int = 100
