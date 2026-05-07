@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.venv/
+venv/
+dist/
+build/
+*.egg
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Node
+node_modules/
+build/
+.env.local
+.env.production
+
+# Docker
+*.log
+
+# Uploads
+/tmp/uploads/
+
+# IDE
+.vscode/
+.idea/
+*.swp
