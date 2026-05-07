@@ -24,8 +24,11 @@ class Settings(BaseSettings):
 
     # CORS
     
-    ALLOWED_ORIGINS: List[str] = [ "http://localhost:8000", 
-      "http://localhost:80", "https://docqa-project.netlify.app"]
+    ALLOWED_ORIGINS: List[str] = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://docqa-project.netlify.app"
+]
     
 
     # File upload
