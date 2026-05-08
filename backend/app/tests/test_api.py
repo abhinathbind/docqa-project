@@ -59,17 +59,17 @@ def ready_doc(sample_doc_id):
 
 class TestSecurity:
     def test_hash_password(self):
-        hashed = hash_password("secret")
-        assert hashed != "secret"
+        hashed = hash_password("secret123")
+        assert hashed != "secret123"
         assert len(hashed) > 20
 
     def test_verify_password_correct(self):
-        hashed = hash_password("mypassword")
-        assert verify_password("mypassword", hashed) is True
+        hashed = hash_password("mypass123")
+        assert verify_password("mypass123", hashed) is True
 
     def test_verify_password_wrong(self):
-        hashed = hash_password("mypassword")
-        assert verify_password("wrongpassword", hashed) is False
+        hashed = hash_password("mypass123")
+        assert verify_password("wrongpass", hashed) is False
 
     def test_create_access_token(self):
         token = create_access_token({"sub": "abc", "email": "a@b.com"})
@@ -137,10 +137,12 @@ class TestFileUpload:
         assert resp.status_code == 400
 
     async def test_list_files(self, auth_headers, ready_doc):
-        mock_db = MagicMock()
-        cursor = MagicMock()
-        cursor.__aiter__ = MagicMock(return_value=iter([ready_doc]))
-        mock_db.documents.find.return_value.sort.return_value = cursor
+    mock_db = MagicMock()
+
+    async def async_gen():
+        yield ready_doc
+
+    mock_db.documents.find.return_value.sort.return_value = async_gen()
 
         with patch("app.api.files.get_db", return_value=mock_db):
             async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
