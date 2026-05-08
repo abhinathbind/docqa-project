@@ -10,10 +10,14 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
 
 def hash_password(password: str) -> str:
+    # Truncate to 72 bytes to avoid bcrypt limit
+    password = password[:71]
     return pwd_context.hash(password)
 
 def verify_password(plain: str, hashed: str) -> bool:
+    plain = plain[:71]
     return pwd_context.verify(plain, hashed)
+
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
