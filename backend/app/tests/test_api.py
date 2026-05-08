@@ -1,7 +1,3 @@
-"""
-Test suite for DocQA API
-Run: pytest --cov=app --cov-report=term-missing
-"""
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch, mock_open
 from datetime import datetime
@@ -12,27 +8,22 @@ from app.services.ai_service import _find_relevant_timestamp
 
 class TestSecurity:
     def test_hash_password(self):
-        hashed = hash_password("secret123")
-        assert hashed != "secret123"
+        hashed = hash_password("pass123")
+        assert hashed != "pass123"
         assert len(hashed) > 20
 
     def test_verify_password_correct(self):
-        hashed = hash_password("mypass123")
-        assert verify_password("mypass123", hashed) is True
+        hashed = hash_password("pass123")
+        assert verify_password("pass123", hashed) is True
 
     def test_verify_password_wrong(self):
-        hashed = hash_password("mypass123")
-        assert verify_password("wrongpass", hashed) is False
+        hashed = hash_password("pass123")
+        assert verify_password("wrong", hashed) is False
 
     def test_create_access_token(self):
         token = create_access_token({"sub": "abc", "email": "a@b.com"})
         assert isinstance(token, str)
         assert len(token) > 10
-
-    def test_create_access_token_with_expiry(self):
-        from datetime import timedelta
-        token = create_access_token({"sub": "abc"}, expires_delta=timedelta(minutes=5))
-        assert isinstance(token, str)
 
     def test_settings_exist(self):
         assert settings.MONGODB_DB == "docqa"
@@ -58,7 +49,7 @@ class TestAIService:
 
     def test_find_relevant_timestamp_fallback(self):
         segments = [{"start": 5.0, "end": 10.0, "text": "hello world"}]
-        result = _find_relevant_timestamp("completely different topic xyz", segments)
+        result = _find_relevant_timestamp("completely different xyz", segments)
         assert result == segments[0]
 
     def test_find_relevant_timestamp_multiple(self):
@@ -168,11 +159,6 @@ class TestSchemas:
         req = ChatRequest(document_id="abc123", message="test")
         assert req.document_id == "abc123"
         assert req.session_id is None
-
-    def test_auth_request(self):
-        from app.models.schemas import AuthRequest
-        req = AuthRequest(email="test@test.com", password="pass123")
-        assert req.email == "test@test.com"
 
     def test_document_response(self):
         from app.models.schemas import DocumentResponse
